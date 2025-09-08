@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-import database
+from database import create_db_and_tables
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
@@ -23,11 +23,7 @@ app.add_middleware(
 
 
 
-@app.get("/index")
-async def home():
-    return "hello world"
-
-
 @app.on_event("startup")
 def on_startup():
-    database.create_db_and_tables()
+    create_db_and_tables()
+    print("Tables created")

@@ -3,7 +3,7 @@ from datetime import datetime, date
 from typing import Optional, List
 from uuid import uuid4
 from pydantic import EmailStr
-from models.models import RoleEnum
+from models.model import RoleEnum
 
     
     
@@ -12,7 +12,7 @@ class UserBase(SQLModel):
     email: Optional[str] = None
     phone: str
     house_address: str
-    role: str
+    role: RoleEnum
 
 class UserRegister(UserBase):
     password: str

@@ -1,12 +1,14 @@
-from sqlalchemy import create_engine, event
+from sqlalchemy import event
 from sqlalchemy.engine import Engine
-from sqlmodel import SQLModel, Session
+from sqlmodel import SQLModel, Session, create_engine
 from typing import Annotated
 from fastapi import Depends
+from models import *
+
 
 
 sqlite_file_name='sales.db'
-SQLALCHEMY_DATABASE_URL=f"sqlite:///{sqlite_file_name}"
+SQLALCHEMY_DATABASE_URL=f"sqlite:///./{sqlite_file_name}"
 
 # setup the engine for the database
 engine=create_engine(SQLALCHEMY_DATABASE_URL, echo=True, connect_args={"check_same_thread": False})
@@ -19,8 +21,8 @@ def get_session():
 SessionDep = Annotated[Session, Depends(get_session)]
 
 def create_db_and_tables():
-    # SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
+    # SQLModel.metadata.drop_all(engine)
 
 
 @event.listens_for(Engine, "connect")
