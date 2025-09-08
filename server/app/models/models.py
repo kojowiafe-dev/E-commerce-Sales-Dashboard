@@ -1,30 +1,26 @@
 from sqlmodel import SQLModel, Field
-from datetime import datetime, date
-from typing import Optional, List
+from enum import Enum
 from uuid import uuid4
 from pydantic import EmailStr
-from models.models import RoleEnum
+from datetime import date
 
+class RoleEnum(str, Enum):
+    admin = "admin"
+    analyst = "analyst"
+    admin = "admin"
     
     
-class UserBase(SQLModel):
-    name: str
-    email: Optional[str] = None
-    phone: str
-    house_address: str
-    role: str
 
-class UserRegister(UserBase):
+class User(SQLModel, table=True):
+    id: uuid4 = Field(default=None, primary_key=True, index=True)
+    name: str = Field()
+    email: EmailStr
+    role: RoleEnum
     password: str
-
-class UserLogin(SQLModel):
-    name: str
-    password: str
-    role: str
     
     
     
-class ProductBase(SQLModel):
+class Product(SQLModel):
     id: uuid4
     name: str
     price: float
@@ -33,13 +29,13 @@ class ProductBase(SQLModel):
     
     
 
-class OrderBase(SQLModel):
+class Order(SQLModel):
     id: uuid4
     order_date: date
     total_amount: float
     
     
-class OrderItemBase(SQLModel):
+class OrderItem(SQLModel):
     id: uuid4
     order_id: uuid4
     product_id: uuid4
