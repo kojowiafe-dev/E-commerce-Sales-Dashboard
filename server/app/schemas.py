@@ -23,26 +23,62 @@ class UserLogin(SQLModel):
     role: str
     
     
-    
-class ProductBase(SQLModel):
-    id: uuid4
-    name: str
-    price: float
-    category: str
-    inventory_count: str
-    
-    
 
-class OrderBase(SQLModel):
-    id: uuid4
-    order_date: date
-    total_amount: float
+# -----------------------
+# Product Schemas
+# -----------------------
+
+class ProductBase(SQLModel):
+    name: str
+    price_each: float
+
+class ProductCreate(ProductBase):
+    pass
+
+class ProductResponse(ProductBase):
+    product_id: int
+
+    class Config:
+        orm_mode = True
     
+    
+    
+# -----------------------
+# OrderItem Schemas
+# -----------------------
     
 class OrderItemBase(SQLModel):
-    id: uuid4
-    order_id: uuid4
-    product_id: uuid4
     quantity: int
     price_each: float
     line_total: float
+
+class OrderItemCreate(OrderItemBase):
+    product_id: int
+
+class OrderItemResponse(OrderItemBase):
+    order_item_id: int
+    product: ProductResponse   # nested product info
+
+    class Config:
+        orm_mode = True
+        
+        
+       
+       
+# -----------------------
+# Order Schemas
+# ----------------------- 
+
+class OrderBase(SQLModel):
+    order_date: datetime
+    purchase_address: str
+
+class OrderCreate(OrderBase):
+    items: List[OrderItemCreate]   # create order with items
+
+class OrderResponse(OrderBase):
+    order_id: int
+    items: List[OrderItemResponse]
+
+    class Config:
+        orm_mode = True
