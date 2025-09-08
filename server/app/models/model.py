@@ -25,12 +25,23 @@ class User(SQLModel, table=True):
     )
     
     
+    def __repr__(self):
+        return f"User(id={self.id}, name={self.name}, email={self.email})"
+    
+    
     
 class Product(SQLModel, table=True):
     __tablename__ = "products"
-    id: int | None = Field(default=None, primary_key=True)
-    name: str
-    price_each: float
+    id: int = Field(default=None, primary_key=True, index=True)
+    name: str = Field(nullable=False, index=True)
+    price_each: float = Field(nullable=False)
+    
+    # Relationship
+    order_items: List["OrderItem"] = Relationship(back_populates="product")
+    
+    
+    def __repr__(self):
+        return f"Product(id={self.id}, name={self.name}, price={self.price_each})"
     
     
     
@@ -43,16 +54,28 @@ class Order(SQLModel, table=True):
     
     # Relationship
     items: List["OrderItem"] = Relationship(back_populates="order")
-
+    
+    
+    def __repr__(self):
+        return f"Order(id={self.id}, date={self.order_date}, purchase={self.purchase_address})"
     
     
     
 class OrderItem(SQLModel, table=True):
     __tablename__ = "order_items"
 
-    id: int | None = Field(default=None, primary_key=True)
+    id: int = Field(default=None, primary_key=True, index=True)
     order_id: int = Field(foreign_key="orders.id", nullable=False)
     product_id: int = Field(foreign_key="products.id", nullable=False)
     quantity: int = Field(default=1, nullable=False)
     price_each: float = Field(default=0.0, nullable=False)
     line_total: float = Field(default=0.0, nullable=False)
+    
+    
+    # Relationship
+    order: List["Order"] = Relationship(back_populates="items")
+    product: List["Product"] = Relationship(back_populates="order_items")
+    
+    
+    def __repr__(self):
+        return f"OrderItem(order={self.order_id}, product={self.product_id}, qty={self.quantity}, total={self.line_total})"
