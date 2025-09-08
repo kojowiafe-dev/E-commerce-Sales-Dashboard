@@ -1,7 +1,5 @@
 from fastapi import FastAPI
 import database
-from routers import users, authentication, event, sermon, members
-from data import members as members_data, events
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
@@ -15,8 +13,6 @@ EMAIL_PASSWORD = os.getenv("SMTP_PASSWORD")
 
 app = FastAPI()
 
-
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -26,6 +22,10 @@ app.add_middleware(
 )
 
 
+
+@app.get("/index")
+async def home():
+    return "hello world"
 
 
 @app.on_event("startup")

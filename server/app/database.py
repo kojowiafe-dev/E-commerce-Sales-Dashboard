@@ -5,7 +5,7 @@ from typing import Annotated
 from fastapi import Depends
 
 
-sqlite_file_name='church.db'
+sqlite_file_name='sales.db'
 SQLALCHEMY_DATABASE_URL=f"sqlite:///{sqlite_file_name}"
 
 # setup the engine for the database

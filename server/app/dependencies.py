@@ -1,4 +1,3 @@
-import models.model as model
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from oauth2 import get_current_user
