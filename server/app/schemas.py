@@ -82,3 +82,17 @@ class OrderResponse(OrderBase):
 
     class Config:
         orm_mode = True
+        
+        
+        
+class TokenData(SQLModel):
+    username: Optional[str] = None
+
+
+class Token(SQLModel):
+    access_token: str
+    token_type: str
+    role: str
+
+class ForgotPasswordRequest(SQLModel):
+    email: EmailStr
