@@ -9,6 +9,7 @@ from models import *
 
 sqlite_file_name='sales.db'
 SQLALCHEMY_DATABASE_URL=f"sqlite:///./{sqlite_file_name}"
+# DATABASE_URL = "postgresql+psycopg2://postgres:secure123@localhost:5432/salesdb"
 
 # setup the engine for the database
 engine=create_engine(SQLALCHEMY_DATABASE_URL, echo=True, connect_args={"check_same_thread": False})
