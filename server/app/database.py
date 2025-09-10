@@ -5,13 +5,15 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from typing import Annotated
 from fastapi import Depends
 from models import *
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
 
 sqlite_file_name='sales.db'
 # SQLALCHEMY_DATABASE_URL=f"sqlite:///./{sqlite_file_name}"
-DATABASE_URL = "postgresql+asyncpg://neondb_owner:npg_uro9KH7Vwpzj@ep-restless-lake-adnof6af-pooler.c-2.us-east-1.aws.neon.tech/neondb?ssl=require"
-
+DATABASE_URL = os.getenv("DATABASE_URL")
 # setup the engine for the database
 # engine=create_engine(SQLALCHEMY_DATABASE_URL, echo=True, connect_args={"check_same_thread": False})
 engine=create_async_engine(DATABASE_URL, echo=False, future=True, pool_size=20, max_overflow=40, pool_timeout=60)
