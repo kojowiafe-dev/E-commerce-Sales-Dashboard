@@ -38,8 +38,8 @@ class Product(SQLModel, table=True):
     
     # Relationship
     order_items: List["OrderItem"] = Relationship(back_populates="product")
-    
-    
+
+
     def __repr__(self):
         return f"Product(id={self.product_id}, name={self.name}, price={self.price_each})"
     

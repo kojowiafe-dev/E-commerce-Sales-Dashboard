@@ -1,6 +1,7 @@
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from sqlmodel import SQLModel, Session, create_engine
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from typing import Annotated
 from fastapi import Depends
 from models import *
@@ -8,26 +9,29 @@ from models import *
 
 
 sqlite_file_name='sales.db'
-SQLALCHEMY_DATABASE_URL=f"sqlite:///./{sqlite_file_name}"
-# DATABASE_URL = "postgresql+psycopg2://postgres:secure123@localhost:5432/salesdb"
+# SQLALCHEMY_DATABASE_URL=f"sqlite:///./{sqlite_file_name}"
+DATABASE_URL = "postgresql+asyncpg://neondb_owner:npg_uro9KH7Vwpzj@ep-restless-lake-adnof6af-pooler.c-2.us-east-1.aws.neon.tech/neondb?ssl=require"
 
 # setup the engine for the database
-engine=create_engine(SQLALCHEMY_DATABASE_URL, echo=True, connect_args={"check_same_thread": False})
+# engine=create_engine(SQLALCHEMY_DATABASE_URL, echo=True, connect_args={"check_same_thread": False})
+engine=create_async_engine(DATABASE_URL, echo=False, future=True, pool_size=20, max_overflow=40, pool_timeout=60)
 
-def get_session():
-    with Session(engine) as session:
+async def get_session():
+    async with AsyncSession(engine) as session:
         yield session
 
 
-SessionDep = Annotated[Session, Depends(get_session)]
+SessionDep = Annotated[AsyncSession, Depends(get_session)]
 
-def create_db_and_tables():
-    SQLModel.metadata.create_all(engine)
+async def create_db_and_tables():
+    async with engine.begin() as conn:
+        await conn.run_sync(SQLModel.metadata.create_all)
+
     # SQLModel.metadata.drop_all(engine)
 
 
-@event.listens_for(Engine, "connect")
-def enable_sqlite_foreign_keys(dpapi_connection, connection_record):
-    cursor = dpapi_connection.cursor()
-    cursor.execute("PRAGMA foreign_keys=ON")
-    cursor.close()
+# @event.listens_for(Engine, "connect")
+# async def enable_sqlite_foreign_keys(dpapi_connection, connection_record):
+#     cursor = await dpapi_connection.cursor()
+#     await cursor.execute("PRAGMA foreign_keys=ON")
+#     await cursor.close()

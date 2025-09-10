@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select
+from sqlalchemy.ext.asyncio import AsyncSession
 from schemas import OrderBase, OrderCreate, OrderResponse
 from database import SessionDep, engine
 from models.model import Order, Product, OrderItem
@@ -7,37 +8,38 @@ from datetime import datetime
 import csv
 
 
-def load_csv_to_db(file_path: str):
-    with Session(engine) as session:
-        with open(file_path, newline="", encoding="utf-8-sig") as csvfile:  
+async def load_csv_to_db(file_path: str):
+    async with AsyncSession(engine) as session:
+        with open(file_path, newline="", encoding="utf-8-sig") as csvfile:
             # utf-8-sig handles BOMs if present
             reader = csv.DictReader(csvfile)
-            
+
             for row in reader:
                 order_id_value = row.get("Order ID", "").strip()
-                
+
                 # 🔒 Skip header or bad rows
                 if not order_id_value.isdigit():
                     print(f"⏩ Skipping invalid row: {row}")
                     continue
 
                 # --- Product ---
-                product = session.exec(
+                product_result = await session.execute(
                     select(Product).where(Product.name == row["Product"].strip())
-                ).first()
+                )
+                product = product_result.scalars().first()
                 if not product:
                     product = Product(
                         name=row["Product"].strip(),
                         price_each=float(row["Price Each"])
                     )
                     session.add(product)
-                    session.commit()
-                    session.refresh(product)
+                    await session.flush()
 
                 # --- Order ---
-                order = session.exec(
+                order_result = await session.execute(
                     select(Order).where(Order.order_id == int(order_id_value))
-                ).first()
+                )
+                order = order_result.scalars().first()
                 if not order:
                     order = Order(
                         order_id=int(order_id_value),
@@ -45,8 +47,7 @@ def load_csv_to_db(file_path: str):
                         purchase_address=row["Purchase Address"].strip()
                     )
                     session.add(order)
-                    session.commit()
-                    session.refresh(order)
+                    await session.flush()
 
                 # --- OrderItem ---
                 order_item = OrderItem(
@@ -58,4 +59,4 @@ def load_csv_to_db(file_path: str):
                 )
                 session.add(order_item)
 
-            session.commit()
+            await session.commit()
