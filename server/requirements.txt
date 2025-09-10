@@ -16,3 +16,4 @@ psycopg[binary]
 pydantic[email]
 python-multipart
 python-dotenv
+asyncpg
