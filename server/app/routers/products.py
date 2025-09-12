@@ -12,15 +12,14 @@ router = APIRouter(
     tags=["Products"]
 )
 
-@router.post("/", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
-async def create_product(product: ProductCreate, db: AsyncSession = Depends(SessionDep)):
-    db_product = Product(**product.model_dump())
-    db.add(db_product)
-    await db.commit()
-    await db.refresh(db_product)
-    return db_product
+@router.get("/{product_id}", response_model=ProductResponse)
+def get_product(product_id: int, db: Session = Depends(SessionDep)):
+    product = db.query(Product).filter(Product.product_id == product_id).first()
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return product
 
 @router.get("/", response_model=List[ProductResponse])
-async def read_products(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(SessionDep)):
-    products = await db.exec(select(Product).offset(skip).limit(limit)).all()
-    return products
+async def get_products(session: SessionDep):
+    result = await session.exec(select(Product)).all()
+    return result
