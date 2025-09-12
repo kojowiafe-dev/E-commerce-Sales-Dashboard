@@ -7,7 +7,10 @@ from database import SessionDep
 from typing import List
 from models.model import Product
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/products", 
+    tags=["Products"]
+)
 
 @router.post("/", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
 async def create_product(product: ProductCreate, db: AsyncSession = Depends(SessionDep)):
