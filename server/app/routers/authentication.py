@@ -19,7 +19,7 @@ async def login(
 ):
     try:
         # Find user by username
-        user = session.exec(
+        user = await session.execute(
             select(model.User).where(model.User.name == form_data.name)
         ).first()
 
@@ -47,7 +47,7 @@ async def login(
             )
 
         # Create access token
-        access_token = token_access.create_access_token(
+        access_token = await token_access.create_access_token(
             data={"sub": user.name, "role": user.role}
         )
 
@@ -71,7 +71,7 @@ async def register(
 ):
     try:
         # Check if username already exists
-        existing_user = session.exec(
+        existing_user = await session.execute(
             select(model.User).where(model.User.name == registration_data.name)
         ).first()
         if existing_user:
@@ -93,7 +93,7 @@ async def register(
 
     
         # Create user
-        hashed_password = hashing.get_password_hash(registration_data.password)
+        hashed_password = await hashing.get_password_hash(registration_data.password)
         db_user = model.User(
             # member_id=db_member.id,
             username=registration_data.name,
@@ -103,7 +103,7 @@ async def register(
         )
 
         session.add(db_user)
-        session.commit()
+        await session.commit()
         session.refresh(db_user)
 
         return db_user
