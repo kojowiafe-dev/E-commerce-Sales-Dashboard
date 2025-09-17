@@ -4,13 +4,18 @@ from typing import Optional, List
 from uuid import uuid4
 from pydantic import EmailStr
 from models.model import RoleEnum
+from uuid import UUID
 
     
     
-class UserBase(SQLModel): 
+class UserBase(SQLModel):
+    user_id: UUID
     name: str
     email: Optional[str]
     role: RoleEnum
+    
+    class Config:
+        orm_mode = True
 
 class UserRegister(UserBase):
     password: str

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import select
-from schemas import UserBase, UserLogin, UserRegister
+from auth.schemas import UserBase
 from database import SessionDep
 from models.model import User
 from hashing import get_password_hash
