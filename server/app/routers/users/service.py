@@ -1,27 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import select
-from auth.schemas import UserBase
-from database import SessionDep
+from routers.auth import schemas
+from database.core import SessionDep
 from models.model import User
-from hashing import get_password_hash
 from datetime import datetime
 from uuid import UUID
 
 
-router = APIRouter(
-    prefix="/users", 
-    tags=["Users"]
-)
 
-
-@router.get("/", response_model=list[UserBase])
 async def get_users(session: SessionDep):
     users = await session.execute(select(User))
     return users.scalars().all()
 
 
 
-@router.get("/{user_id}", response_model=UserBase)
 async def get_user_by_id(user_id: UUID, session: SessionDep):
     user = await session.get(User, user_id)
     if not user:
@@ -30,8 +22,7 @@ async def get_user_by_id(user_id: UUID, session: SessionDep):
 
 
 
-@router.put("/{user_id}", response_model=UserBase)
-async def update_user(user_id: UUID, user_update: UserBase, session: SessionDep):
+async def update_user(user_id: UUID, user_update: schemas.UserBase, session: SessionDep):
     db_user = await session.get(User, user_id)
     if not db_user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
@@ -46,7 +37,6 @@ async def update_user(user_id: UUID, user_update: UserBase, session: SessionDep)
 
 
 
-@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(user_id: UUID, session: SessionDep):
     user = await session.get(User, id)
     if not user:

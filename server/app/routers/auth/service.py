@@ -3,9 +3,9 @@ from typing import Annotated
 from uuid import UUID, uuid4
 from fastapi import Depends, HTTPException, status
 from models import model
-from auth import schemas, token_access
+from routers.auth import schemas, token_access
 from sqlmodel import select
-from database import SessionDep
+from database.core import SessionDep
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
