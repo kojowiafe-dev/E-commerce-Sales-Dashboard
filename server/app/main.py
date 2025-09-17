@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from database import create_db_and_tables
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from routers import authentication, users, products
+from routers import users, products
+from auth import controller
 import os
 
 
@@ -27,7 +28,7 @@ async def health_check():
     return {"status": "healthy"}
 
 
-app.include_router(authentication.router)
+app.include_router(controller.router)
 app.include_router(users.router)
 app.include_router(products.router)
 
