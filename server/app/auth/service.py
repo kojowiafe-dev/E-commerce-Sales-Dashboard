@@ -92,53 +92,46 @@ async def login(
     form_data: schemas.UserLogin,
     session: SessionDep
 ):
-    try:
-        # Find user by username
-        user = await session.execute(
-            select(model.User).where(model.User.name == form_data.name)
-        )
-        user = user.scalars().first()
+    # Find user by username
+    user = await session.execute(
+        select(model.User).where(model.User.name == form_data.name)
+    )
+    user = user.scalars().first()
 
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Incorrect username",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-
-        # Verify password
-        if not verify_password(form_data.password, user.password):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Incorrect password",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-
-        # Validate role
-        if user.role != form_data.role:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"User is not authorized as {form_data.role}",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
-
-        # Create access token
-        access_token = await token_access.create_access_token(
-            data={"sub": user.name, "role": user.role}
-        )
-        
-
-        return {
-            "access_token": access_token,
-            "token_type": "bearer",
-            "role": user.role
-        }
-
-    except Exception as e:
+    if not user:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An error occurred during login: {str(e)}"
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username",
+            headers={"WWW-Authenticate": "Bearer"},
         )
+
+    # Verify password
+    if not verify_password(form_data.password, user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    # Validate role
+    if user.role != form_data.role:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"User is not authorized as {form_data.role}",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    # Create access token
+    access_token = token_access.create_access_token(
+        data={"sub": user.name, "role": user.role}
+    )
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "role": user.role
+    }
+
     
     
 def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]) -> schemas.TokenData:
