@@ -42,7 +42,8 @@ async def register(
         # Check if username already exists
         existing_user = await session.execute(
             select(model.User).where(model.User.name == registration_data.name)
-        ).first()
+        )
+        existing_user = existing_user.scalars().first()
         if existing_user:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -53,7 +54,8 @@ async def register(
         if registration_data.email:
             existing_email = await session.execute(
                 select(model.User).where(model.User.email == registration_data.email)
-            ).first()
+            )
+            existing_email = existing_email.scalars().first()
             if existing_email:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
@@ -62,23 +64,24 @@ async def register(
 
     
         # Create user
-        hashed_password = await get_password_hash(registration_data.password)
+        hashed_password = get_password_hash(registration_data.password)
         db_user = model.User(
             # member_id=db_member.id,
-            username=registration_data.name,
+            name=registration_data.name,
             email=registration_data.email,
-            password=hashed_password,
-            role=registration_data.role
+            role=registration_data.role,
+            password=hashed_password
         )
 
         session.add(db_user)
         await session.commit()
-        session.refresh(db_user)
+        await session.refresh(db_user)
 
         return db_user
 
     except Exception as e:
         print(f"Registration error: {str(e)}")  # Debug log
+        await session.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"An error occurred during registration."

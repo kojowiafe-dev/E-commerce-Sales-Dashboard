@@ -7,11 +7,9 @@ from models.model import RoleEnum
 
     
     
-class UserBase(SQLModel):
+class UserBase(SQLModel): 
     name: str
-    email: Optional[str] = None
-    phone: str
-    house_address: str
+    email: Optional[str]
     role: RoleEnum
 
 class UserRegister(UserBase):
