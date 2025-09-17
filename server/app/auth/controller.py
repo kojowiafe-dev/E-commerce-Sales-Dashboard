@@ -1,0 +1,42 @@
+from typing import Annotated
+from fastapi import APIRouter, Depends, Request
+from starlette import status
+from models import model
+from auth import schemas, service
+from fastapi.security import OAuth2PasswordRequestForm
+from database import SessionDep
+from rate_limiter import limiter
+router = APIRouter(
+    prefix='/auth',
+    tags=['auth']
+)
+
+
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.UserBase)
+@limiter.limit("5/hour")
+async def register_user(request: Request, session: SessionDep,
+                      register_user_request: schemas.UserRegister):
+    service.register(session, register_user_request)
+    
+    
+    
+@router.post("/login", status_code=status.HTTP_202_ACCEPTED, response_model=schemas.Token)
+@limiter.limit("5/hour")
+async def login_user(request: Request, session: SessionDep,
+                      login_user_request: schemas.UserLogin):
+    service.login(session, login_user_request)
+    
+    
+    
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.UserBase)
+@limiter.limit("5/hour")
+async def register_user(request: Request, session: SessionDep,
+                      register_user_request: schemas.UserRegister):
+    service.register_user(session, register_user_request)
+
+
+@router.post("/token", response_model=schemas.Token)
+async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+                                 session: SessionDep):
+    return service.login_for_access_token(form_data, session)
+

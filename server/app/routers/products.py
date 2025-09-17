@@ -12,6 +12,12 @@ router = APIRouter(
     tags=["Products"]
 )
 
+
+@router.get("/total_products")
+async def get_number_of_products(session: SessionDep):
+    result = await get_products(session)
+    return {"number of products": str(len(result))}
+
 @router.get("/{product_id}", response_model=ProductResponse)
 async def get_product(product_id: int, db: Session = Depends(SessionDep)):
     product = await db.query(Product).filter(Product.product_id == product_id).first()
@@ -23,9 +29,3 @@ async def get_product(product_id: int, db: Session = Depends(SessionDep)):
 async def get_products(session: SessionDep):
     result = await session.execute(select(Product))
     return result.scalars().all()
-
-
-@router.get("/total_products")
-def get_number_of_products(session: SessionDep):
-    result = len(get_products(session))
-    return {"number of products": str(len(result))}
