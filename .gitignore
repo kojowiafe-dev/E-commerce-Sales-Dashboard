@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+
+# FastAPI
+.env
+
+# Node / React
+node_modules/
+build/
+dist/
+
+# Others
+.DS_Store
