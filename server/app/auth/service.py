@@ -96,7 +96,8 @@ async def login(
         # Find user by username
         user = await session.execute(
             select(model.User).where(model.User.name == form_data.name)
-        ).first()
+        )
+        user = user.scalars().first()
 
         if not user:
             raise HTTPException(
@@ -125,6 +126,7 @@ async def login(
         access_token = await token_access.create_access_token(
             data={"sub": user.name, "role": user.role}
         )
+        
 
         return {
             "access_token": access_token,
