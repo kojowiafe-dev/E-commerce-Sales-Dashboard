@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel
-from products.schemas import ProductResponse
+from ..products.schemas import ProductResponse
 
 class OrderItemBase(SQLModel):
     quantity: int

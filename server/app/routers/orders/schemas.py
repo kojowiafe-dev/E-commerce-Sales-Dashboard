@@ -1,9 +1,10 @@
 from sqlmodel import SQLModel
 from datetime import datetime
 from typing import List
+from ..orderitems.schemas import OrderItemCreate, OrderItemResponse
 
 class OrderBase(SQLModel):
-    order_date: datetime
+    order_date: str
     purchase_address: str
 
 class OrderCreate(OrderBase):
