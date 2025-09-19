@@ -19,11 +19,17 @@ class UserBase(SQLModel):
 
 class UserRegister(UserBase):
     password: str
+    
+    class Config:
+        orm_mode = True
 
 class UserLogin(SQLModel):
     name: str
     password: str
     role: str
+    
+    class Config:
+        orm_mode = True
     
     
 class TokenData(SQLModel):
@@ -39,3 +45,6 @@ class Token(SQLModel):
     access_token: str
     token_type: str
     role: str
+    
+    class Config:
+        orm_mode = True

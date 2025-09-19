@@ -11,7 +11,10 @@ async def get_number_of_order_items(session: SessionDep):
 
 
 async def get_order_item(order_item_id: int, session: Session = Depends(SessionDep)):
-    order_item = await session.query(OrderItem).filter(OrderItem.order_item_id == order_item_id).first()
+    order_item = await session.exec(
+        select(OrderItem).where(OrderItem.order_item_id == order_item_id)
+    )
+    order_item = order_item.first()
     if not order_item:
         raise HTTPException(status_code=404, detail="order item not found")
     return order_item

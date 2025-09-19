@@ -53,7 +53,7 @@ class Order(SQLModel, table=True):
     purchase_address: str = Field(default=None)
     
     # Relationship
-    items: List["OrderItem"] = Relationship(back_populates="order")
+    items: list["OrderItem"] = Relationship(back_populates="order", sa_relationship_kwargs={"lazy": "selectin"})
     
     
     def __repr__(self):
