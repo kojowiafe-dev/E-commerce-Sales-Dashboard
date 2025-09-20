@@ -7,6 +7,7 @@ const navItems = [
   { name: "Products", icon: <Package size={20} />, path: "/products" },
   { name: "Orders", icon: <ShoppingCart size={20} />, path: "/orders" },
   { name: "Order Items", icon: <List size={20} />, path: "/order-items" },
+  { name: "Dashboard", icon: <List size={20} />, path: "/dashboard" },
 ];
 
 const Sidebar = ({ onLogout }) => {

@@ -1,12 +1,16 @@
 import React from "react";
-import PageCard from "../components/ui/PageCard";
+import StatsCards from "../components/dashboard/StatsCards";
+import ProductsTable from "../components/dashboard/ProductsTable";
+import SalesChart from "../components/dashboard/SalesChart";
 
 const Dashboard = () => (
-  <PageCard title="Dashboard Overview">
-    <div className="text-gray-700 dark:text-gray-200">
-      Welcome to your E-commerce Sales Dashboard!
+  <div className="space-y-6">
+    <StatsCards />
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <ProductsTable />
+      <SalesChart />
     </div>
-  </PageCard>
+  </div>
 );
 
 export default Dashboard;

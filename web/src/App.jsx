@@ -14,6 +14,8 @@ import Orders from "./routers/Orders";
 import OrderItems from "./routers/OrderItems";
 import Login from "./routers/Login";
 import Register from "./routers/Register";
+import Dashboard from "./routers/Dashboard";
+import { ThemeProvider } from "./components/theme-provider";
 
 const Layout = ({ children, onLogout }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -37,9 +39,11 @@ const Layout = ({ children, onLogout }) => {
       )}
       <div className="flex-1 flex flex-col min-h-screen ml-0 md:ml-64">
         <Header onMenuClick={() => setSidebarOpen(true)} />
-        <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
-          {children}
-        </main>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
+            {children}
+          </main>
+        </ThemeProvider>
       </div>
     </div>
   );
@@ -64,6 +68,7 @@ const AppRoutes = () => {
               <Route path="/products" element={<Products />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/order-items" element={<OrderItems />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </Layout>

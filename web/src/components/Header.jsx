@@ -1,4 +1,5 @@
 import React from "react";
+import ModeToggle from "./mode-toggle";
 
 const Header = ({ onMenuClick }) => (
   <header className="sticky top-0 z-20 w-full h-16 flex items-center justify-between bg-white dark:bg-gray-900 shadow px-4 border-b border-gray-200 dark:border-gray-800">
@@ -25,7 +26,9 @@ const Header = ({ onMenuClick }) => (
     <div className="font-semibold text-lg text-blue-600 dark:text-blue-400">
       Sales Dashboard
     </div>
-    <div></div>
+    <div>
+      <ModeToggle />
+    </div>
   </header>
 );
 
