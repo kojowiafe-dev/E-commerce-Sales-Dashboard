@@ -1,7 +1,7 @@
 import React from "react";
 import PageCard from "../components/ui/PageCard";
 
-const Dashboard = () => (
+const Overview = () => (
   <PageCard title="Dashboard Overview">
     <div className="text-gray-700 dark:text-gray-200">
       Welcome to your E-commerce Sales Dashboard!
@@ -9,4 +9,4 @@ const Dashboard = () => (
   </PageCard>
 );
 
-export default Dashboard;
+export default Overview;

@@ -1,12 +1,12 @@
 import React from "react";
 import PageCard from "../components/ui/PageCard";
 
-const Dashboard = () => (
-  <PageCard title="Dashboard Overview">
+const Orders = () => (
+  <PageCard title="Orders Page">
     <div className="text-gray-700 dark:text-gray-200">
-      Welcome to your E-commerce Sales Dashboard!
+      Orders content goes here.
     </div>
   </PageCard>
 );
 
-export default Dashboard;
+export default Orders;
