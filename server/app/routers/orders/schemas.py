@@ -23,3 +23,7 @@ class OrderResponse(OrderBase):
     class Config:
         orm_mode = True
         
+        
+class PaginatedOrders(SQLModel):
+    items: List[OrderResponse]
+    total: int

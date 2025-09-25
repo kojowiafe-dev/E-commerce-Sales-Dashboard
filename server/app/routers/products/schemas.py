@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel
-
+from typing import List, Optional
 
 class ProductBase(SQLModel):
     name: str
@@ -16,3 +16,8 @@ class ProductResponse(ProductBase):
 
     class Config:
         orm_mode = True
+        
+        
+class PaginatedProducts(SQLModel):
+    items: List[ProductResponse]
+    total: int
