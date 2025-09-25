@@ -7,7 +7,7 @@ const navItems = [
   { name: "Products", icon: <Package size={20} />, path: "/products" },
   { name: "Orders", icon: <ShoppingCart size={20} />, path: "/orders" },
   { name: "Order Items", icon: <List size={20} />, path: "/order-items" },
-  { name: "Dashboard", icon: <List size={20} />, path: "/dashboard" },
+  // { name: "Dashboard", icon: <List size={20} />, path: "/dashboard" },
 ];
 
 const Sidebar = ({ onLogout }) => {
@@ -22,7 +22,7 @@ const Sidebar = ({ onLogout }) => {
           <Link
             key={item.name}
             to={item.path}
-            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-100 dark:hover:bg-blue-900 hover:text-blue-700 dark:hover:text-blue-300 ${
+            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors font-medium text-gray-700 dark:text-gray-200 font-bold hover:bg-blue-100 dark:hover:bg-blue-900 hover:text-blue-700 dark:hover:text-blue-300 ${
               location.pathname === item.path
                 ? "bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300"
                 : ""
