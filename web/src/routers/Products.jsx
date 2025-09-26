@@ -12,6 +12,15 @@ import {
   ChevronUpIcon,
   ChevronDownIcon,
 } from "@heroicons/react/24/outline";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import Page from "../components/Page";
 import api from "../api/api";
 
@@ -205,6 +214,33 @@ const Server = () => {
                 </tbody>
               </table>
             </div>
+          </div>
+          <div className="mt-6 w-full h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                data={products}
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+              >
+                <defs>
+                  <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="name" tick={{ fontSize: 12 }} angle={60} />
+                <YAxis tick={{ fontSize: 12 }} />
+                <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+                <Tooltip />
+                <Area
+                  type="monotone"
+                  dataKey="price_each"
+                  angle={30}
+                  stroke="#8884d8"
+                  fillOpacity={1}
+                  fill="url(#colorPrice)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
