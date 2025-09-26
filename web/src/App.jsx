@@ -14,14 +14,12 @@ import Orders from "./routers/Orders";
 import OrderItems from "./routers/OrderItems";
 import Login from "./routers/Login";
 import Register from "./routers/Register";
-import Dashboard from "./routers/Dashboard";
-import Server from "./dashboard/server";
 import { ThemeProvider } from "./components/theme-provider";
 
 const Layout = ({ children, onLogout }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex overflow-x-hidden">
       {/* Sidebar for desktop */}
       <div className="hidden md:block">
         <Sidebar onLogout={onLogout} />
@@ -38,10 +36,10 @@ const Layout = ({ children, onLogout }) => {
           </div>
         </div>
       )}
-      <div className="flex-1 flex flex-col min-h-screen ml-0 md:ml-64">
+      <div className="flex-1 flex flex-col min-h-screen ml-0 md:ml-64 overflow-x-hidden">
         <Header onMenuClick={() => setSidebarOpen(true)} />
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-          <main className="text-white flex-1 max-w-7xl mx-auto w-full bg-black">
+          <main className="text-white flex-1 w-full bg-black overflow-x-hidden">
             {children}
           </main>
         </ThemeProvider>
@@ -61,7 +59,6 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
 
       <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Dashboard />} />
       <Route
         path="/*"
         element={
@@ -69,7 +66,6 @@ const AppRoutes = () => {
             <Routes>
               <Route path="/" element={<Overview />} />
               <Route path="/products" element={<Products />} />
-              <Route path="/server" element={<Server />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/order-items" element={<OrderItems />} />
               <Route path="*" element={<Navigate to="/" />} />
