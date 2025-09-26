@@ -189,7 +189,7 @@ button:focus-visible {
   }
 } */
 
-:root {
+/* :root {
   --sidebar: hsl(0 0% 98%);
 
   --sidebar-foreground: hsl(240 5.3% 26.1%);
@@ -241,4 +241,18 @@ button:focus-visible {
   --color-sidebar-border: var(--sidebar-border);
 
   --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+} */
+
+::view-transition-old(root), ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
 }
