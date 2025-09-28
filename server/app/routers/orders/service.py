@@ -4,11 +4,33 @@ from database.core import SessionDep
 from models.model import Order, OrderItem
 from sqlalchemy import func, select, or_, cast, String
 from sqlalchemy.orm import selectinload
+from ..orderitems.service import get_revenue_trend, get_sales_by_city, get_total_revenue
+from ..products.service import get_top_products
 from .schemas import PaginatedOrders, OrderResponse
 
 
+
+async def get_summary(session: SessionDep):
+    total_orders = await get_number_of_orders(session)
+    total_revenue = await get_total_revenue(session)
+    top_products = await get_top_products(session)
+    revenue_trend = await get_revenue_trend(session)
+    sales_by_city = await get_sales_by_city(session)
+
+    return {
+        "total_orders": total_orders,
+        "total_revenue": total_revenue,
+        "top_products": top_products,
+        "revenue_trend": revenue_trend,
+        "sales_by_city": sales_by_city,
+    }
+
+
+    
+
 async def get_number_of_orders(session: SessionDep):
-    result = await get_orders(session)
+    result = await session.execute(select(Order))
+    result = result.scalars().all()
     return {"number of orders": str(len(result))}
 
 

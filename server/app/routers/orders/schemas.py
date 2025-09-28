@@ -1,29 +1,41 @@
+# routers/orders/schemas.py
+from typing import TYPE_CHECKING, List
 from sqlmodel import SQLModel
-from datetime import datetime
-from typing import List
-from ..orderitems.schemas import OrderItemCreate, OrderItemResponse
+from ..shared.schemas import OrderBase
 
-class OrderBase(SQLModel):
-    order_date: str
-    purchase_address: str
-    
-    class Config:
-        orm_mode = True
+if TYPE_CHECKING:
+    # only for type checkers / IDEs — prevents runtime circular import
+    from ..orderitems.schemas import OrderItemCreate, OrderItemInOrderResponse
+
 
 class OrderCreate(OrderBase):
-    items: List[OrderItemCreate]   # create order with items
-    
+    # use a stringified List[...] to avoid importing OrderItemCreate at runtime
+    items: "List[OrderItemCreate]"
+
     class Config:
-        orm_mode = True
+        from_attributes = True
+
 
 class OrderResponse(OrderBase):
     order_id: int
-    items: List[OrderItemResponse]
+    items: "List[OrderItemInOrderResponse]"  # forward reference as string
 
     class Config:
-        orm_mode = True
-        
-        
+        from_attributes = True
+
+
 class PaginatedOrders(SQLModel):
-    items: List[OrderResponse]
+    items: "List[OrderResponse]"
     total: int
+
+
+
+# Explicitly import OrderItemInOrderResponse and rebuild OrderResponse after all models are defined
+try:
+    from ..orderitems.schemas import OrderItemInOrderResponse
+    OrderResponse.model_rebuild(_types_namespace=globals())
+except Exception:
+    pass
+
+except Exception:
+    pass
