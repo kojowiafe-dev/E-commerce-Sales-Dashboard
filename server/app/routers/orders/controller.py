@@ -23,10 +23,10 @@ async def get_order(order_id: int, session: SessionDep):
     return order
 
 
-# @router.get("/", response_model=List[schemas.OrderResponse])
-# async def get_orders(session: SessionDep):
-#     orders = await service.get_orders(session)
-#     return orders
+@router.get("/analytics/summary")
+async def get_analytics_summary(session: SessionDep):
+    summary = await service.get_summary(session)
+    return summary
 
 
 @router.get("/", response_model=schemas.PaginatedOrders)

@@ -1,9 +1,22 @@
 from fastapi import Depends, HTTPException, status
 from sqlmodel import func, select, Session
 from database.core import SessionDep
-from models.model import Product
+from models.model import OrderItem, Product
 from routers.products import schemas
 
+
+
+async def get_top_products(session: SessionDep, limit: int = 5):
+    query = (
+        select(Product.name, func.sum(OrderItem.quantity).label("total_sold"))
+        .join(OrderItem.product)
+        .group_by(Product.name)
+        .order_by(func.sum(OrderItem.quantity).desc())
+        .limit(limit)
+    )
+    result = await session.execute(query)
+    return [{"name": row[0], "total_sold": row[1]} for row in result]
+    
 
 
 async def get_number_of_products(session: SessionDep):
