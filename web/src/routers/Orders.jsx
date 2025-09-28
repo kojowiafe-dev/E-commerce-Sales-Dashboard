@@ -6,6 +6,16 @@ import {
   getFilteredRowModel,
   flexRender,
 } from "@tanstack/react-table";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import CustomTooltip from "../components/CustomToolTip";
 import { useQuery } from "@tanstack/react-query";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Page from "../components/Page";
@@ -31,8 +41,20 @@ const Orders = () => {
     keepPreviousData: true,
   });
 
-  const orders = data?.items ?? [];
+  // const orders = data?.items ?? [];
+  const orders = useMemo(() => data?.items ?? [], [data?.items]);
   const totalPages = Math.ceil((data?.total ?? 0) / pageSize);
+
+  const chartData = useMemo(() => {
+    return orders.map((order) => ({
+      order_id: order.order_id,
+      name: order.items?.[0]?.product?.name ?? "Unknown",
+      price_each: order.items?.[0]?.price_each ?? 0,
+      quantity: order.items?.[0]?.quantity ?? 0,
+      line_total: order.items?.[0]?.line_total ?? 0,
+      order_date: order.order_date,
+    }));
+  }, [orders]);
 
   const columns = useMemo(
     () => [
@@ -213,6 +235,34 @@ const Orders = () => {
                 </tbody>
               </table>
             </div>
+          </div>
+          <div className="mt-6 w-full h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                data={chartData}
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+              >
+                <defs>
+                  <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
+                <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+                <Tooltip content={<CustomTooltip />} />
+
+                {/* You can choose which metric to chart */}
+                <Area
+                  type="monotone"
+                  dataKey="line_total" // total sales per order
+                  stroke="#82ca9d"
+                  fillOpacity={1}
+                  fill="url(#colorTotal)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
         </div>
 

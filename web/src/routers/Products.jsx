@@ -21,6 +21,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import CustomTooltip from "../components/CustomToolTip";
 import Page from "../components/Page";
 import api from "../api/api";
 
@@ -227,14 +228,14 @@ const Server = () => {
                     <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="name" tick={{ fontSize: 12 }} angle={60} />
+                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-                <Tooltip />
+                <Tooltip content={<CustomTooltip />} />
                 <Area
                   type="monotone"
                   dataKey="price_each"
-                  angle={30}
+                  // angle={30}
                   stroke="#8884d8"
                   fillOpacity={1}
                   fill="url(#colorPrice)"
