@@ -11,6 +11,11 @@ router = APIRouter(
 )
 
 
+@router.get("/top-products")
+async def get_top_products(session: SessionDep, limit: int = 10):
+    result = await service.get_top_products(session, limit)
+    return result
+
 @router.get("/total_products")
 async def get_number_of_products(session: SessionDep):
     result = await service.get_number_of_products(session)

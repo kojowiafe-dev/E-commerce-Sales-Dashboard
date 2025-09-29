@@ -17,6 +17,10 @@ async def get_number_of_order_items(session: SessionDep):
     return result
 
 
+# @router.get()
+# async def
+
+
 @router.get("/{order_item_id}", response_model=schemas.OrderItemResponse)
 async def get_order_item(order_item_id: int, session: SessionDep):
     order_item = await service.get_order_item(order_item_id, session)
