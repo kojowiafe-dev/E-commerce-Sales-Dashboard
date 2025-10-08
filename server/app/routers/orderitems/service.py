@@ -45,7 +45,11 @@ from sqlalchemy import func
 async def get_sales_by_city(session: SessionDep, limit: int = 5):
     query = (
         select(
-            func.substr(Order.purchase_address, func.instr(Order.purchase_address, ',') + 2, 50).label("city"),
+            func.substr(
+                Order.purchase_address,
+                func.strpos(Order.purchase_address, ",") + 2,  # find first comma
+                50
+            ).label("city"),
             func.sum(OrderItem.line_total).label("revenue")
         )
         .join(Order.items)
@@ -54,7 +58,8 @@ async def get_sales_by_city(session: SessionDep, limit: int = 5):
         .limit(limit)
     )
     result = await session.execute(query)
-    return [{"city": row[0], "revenue": float(row[1])} for row in result]
+    return [{"city": row.city.strip(), "revenue": float(row.revenue)} for row in result]
+
 
 
 
