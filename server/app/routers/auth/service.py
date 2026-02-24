@@ -1,11 +1,10 @@
-from datetime import timedelta, datetime, timezone
+from datetime import timedelta
 from typing import Annotated
-from uuid import UUID, uuid4
 from fastapi import Depends, HTTPException, status
-from models import model
-from routers.auth import schemas, token_access
+from ...models import model
+from ...routers.auth import schemas, token_access
 from sqlmodel import select
-from database.core import SessionDep
+from ...database.core import SessionDep
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
@@ -84,7 +83,7 @@ async def register(
         await session.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"An error occurred during registration."
+            detail="An error occurred during registration."
         )
         
         

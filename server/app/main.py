@@ -1,10 +1,13 @@
 from fastapi import FastAPI
-from database.core import create_db_and_tables
+from .database.core import create_db_and_tables
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from api.api import register_routes
+from .api.api import register_routes
 import os
+import errx
+from errx import DisplayStyle
 
+errx.bootstrap()
 
 load_dotenv()
 EMAIL_HOST = os.getenv("SMTP_HOST")
@@ -13,6 +16,8 @@ EMAIL_USERNAME = os.getenv("SMTP_USERNAME")
 EMAIL_PASSWORD = os.getenv("SMTP_PASSWORD")
 
 app = FastAPI()
+
+errx.install(app, return_json=False, display_style=DisplayStyle.NONE)
 
 app.add_middleware(
     CORSMiddleware,

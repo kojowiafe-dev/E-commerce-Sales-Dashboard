@@ -1,8 +1,8 @@
-from fastapi import Depends, HTTPException, status
-from sqlmodel import func, select, Session
-from database.core import SessionDep
-from models.model import OrderItem, Product
-from routers.products import schemas
+from fastapi import HTTPException, status
+from sqlmodel import func, select
+from ...database.core import SessionDep
+from ...models.model import OrderItem, Product
+from ...routers.products import schemas
 
 
 

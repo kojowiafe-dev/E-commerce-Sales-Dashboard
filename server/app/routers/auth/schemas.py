@@ -1,9 +1,6 @@
-from sqlmodel import SQLModel, Field
-from datetime import datetime, date
-from typing import Optional, List
-from uuid import uuid4
-from pydantic import EmailStr
-from models.model import RoleEnum
+from sqlmodel import SQLModel
+from typing import Optional
+from ...models.model import RoleEnum
 from uuid import UUID
 
     

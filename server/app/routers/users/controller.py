@@ -1,12 +1,12 @@
 from fastapi import APIRouter, status
-from routers.auth import schemas
-from routers.users import service
-from database.core import SessionDep
+from ...routers.auth import schemas
+from ...routers.users import service
+from ...database.core import SessionDep
 from uuid import UUID
 
 
 router = APIRouter(
-    prefix="/users", 
+    prefix="/users",
     tags=["Users"]
 )
 

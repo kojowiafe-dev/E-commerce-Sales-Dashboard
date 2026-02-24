@@ -1,13 +1,11 @@
-from sqlalchemy import event
-from sqlalchemy.engine import Engine
-from sqlmodel import SQLModel, Session, create_engine
+from sqlmodel import SQLModel
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine
 from typing import Annotated
 from fastapi import Depends
-from models import *
+# from models import *
 from dotenv import load_dotenv
-import os
+
 
 load_dotenv()
 
