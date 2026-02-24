@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import HTTPException, status
 from sqlmodel import select
-from routers.auth import schemas
-from database.core import SessionDep
-from models.model import User
-from datetime import datetime
+from ...routers.auth import schemas
+from ...database.core import SessionDep
+from ...models.model import User
 from uuid import UUID
 
 

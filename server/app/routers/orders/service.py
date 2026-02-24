@@ -1,8 +1,7 @@
-from fastapi import Depends, HTTPException, status
-from sqlmodel import func, select, Session
-from database.core import SessionDep
-from models.model import Order, OrderItem
-from sqlalchemy import func, select, or_, cast, String
+from sqlmodel import func, select
+from ...database.core import SessionDep
+from ...models.model import Order, OrderItem
+from sqlalchemy import or_, cast, String
 from sqlalchemy.orm import selectinload
 from ..orderitems.service import get_revenue_trend, get_sales_by_city, get_total_revenue
 from ..products.service import get_top_products

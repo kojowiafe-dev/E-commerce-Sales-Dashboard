@@ -1,7 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from routers.orders import schemas, service
-from database.core import SessionDep
-from typing import List
+from fastapi import APIRouter
+from ...routers.orders import schemas, service
+from ...database.core import SessionDep
 
 
 

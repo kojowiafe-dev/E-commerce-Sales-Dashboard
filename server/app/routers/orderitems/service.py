@@ -1,9 +1,8 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import HTTPException, status
 from sqlalchemy import func, or_
-from sqlmodel import String, cast, select, Session
-from database.core import SessionDep
-from models.model import OrderItem, Order, Product
-from sqlalchemy.future import select
+from sqlmodel import String, cast, select
+from ...database.core import SessionDep
+from ...models.model import OrderItem, Order
 from sqlalchemy.orm import selectinload
 from ..orderitems import schemas
 
@@ -13,8 +12,6 @@ async def get_total_revenue(session: SessionDep):
     total_revenue = result.scalar() or 0.0
     return {"total_revenue": f"{total_revenue:.2f}"}
 
-
-from sqlalchemy import func, text
 
 async def get_revenue_trend(session: SessionDep):
     query = (
@@ -38,10 +35,6 @@ async def get_revenue_trend(session: SessionDep):
     ]
 
 
-
-
-from sqlalchemy import func
-
 async def get_sales_by_city(session: SessionDep, limit: int = 5):
     query = (
         select(
@@ -61,14 +54,9 @@ async def get_sales_by_city(session: SessionDep, limit: int = 5):
     return [{"city": row.city.strip(), "revenue": float(row.revenue)} for row in result]
 
 
-
-
-
 async def get_number_of_order_items(session: SessionDep):
     result = await get_order_items(session)
     return {"number of order items": str(len(result))}
-
-
 
 
 async def get_order_item(order_item_id: str, session: SessionDep):
@@ -87,7 +75,6 @@ async def get_order_item(order_item_id: str, session: SessionDep):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="order_item not found")
 
     return order_item
-
 
 
 async def get_order_items(session: SessionDep, page: int, limit: int, search: str | None = None):

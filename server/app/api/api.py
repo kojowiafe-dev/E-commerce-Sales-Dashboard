@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-from routers.products.controller import router as products_router
-from routers.users.controller import router as users_router
-from routers.auth.controller import router as auth_router
-from routers.orders.controller import router as orders_router
-from routers.orderitems.controller import router as orderitems_router
+from ..routers.products.controller import router as products_router
+from ..routers.users.controller import router as users_router
+from ..routers.auth.controller import router as auth_router
+from ..routers.orders.controller import router as orders_router
+from ..routers.orderitems.controller import router as orderitems_router
 
 
 def register_routes(app: FastAPI):
